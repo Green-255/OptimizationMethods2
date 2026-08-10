@@ -32,6 +32,9 @@ namespace OptimizavimasBeApribojimu
             x = 1;
             y = 1;
 
+            //x = 0.8;
+            //y = 0;
+
             double epsilon = 1e-5; // variable that defines end of algorithms.
             Program program = new Program();
 
@@ -39,9 +42,14 @@ namespace OptimizavimasBeApribojimu
             //(List<(double, double, double)> pointTimeLine, int functionCallsCount, int cycles) = program.gradientDescent(x, y, epsilon);
             (List<(double, double, double)> pointTimeLine, int functionCallsCount, int cycles) = program.FastestDescent(x, y, epsilon);
 
+            int i = 0;
             foreach (var point in pointTimeLine)
             {
-                Console.WriteLine($"X: {point.Item1}, Y: {point.Item2}, Žingsnio ilgis: {point.Item3}");
+                //Console.WriteLine($"{i}| X: {point.Item1}, Y: {point.Item2}, Žingsnio ilgis: {point.Item3}");
+
+                Console.WriteLine($"{i} & {Math.Round(point.Item1, 10)} & {Math.Round(point.Item2, 10)} & {Math.Round(point.Item3, 10)} " +
+                    $"& {-program.ObjectiveFunction(point.Item1, point.Item2)} \\\\");
+                i++;
             }
             program.Display3D(pointTimeLine);
 
@@ -59,8 +67,6 @@ namespace OptimizavimasBeApribojimu
             int cycles = 0;
             int targetFunctionCalled = 0;
             double t = (-1 + Math.Sqrt(5)) / 2;
-            double leftBorder = 0;
-            double rightBorder = 5;
 
             while (cycles < 5000)
             {
@@ -72,6 +78,8 @@ namespace OptimizavimasBeApribojimu
                         $" už epsilon {epsilon}: gradX: {gradX}, gradY: {gradY}\n");
                     break;
                 }
+                double leftBorder = 0;
+                double rightBorder = 5;
 
                 double interval = rightBorder - leftBorder;
                 double lambda1 = rightBorder - t * interval; 
@@ -187,35 +195,6 @@ namespace OptimizavimasBeApribojimu
             var xRange = Enumerable.Range(0, gridSize).Select(i => i * 1.0 / gridSize).ToArray();
             var yRange = Enumerable.Range(0, gridSize).Select(i => i * 1.0 / gridSize).ToArray();
 
-            //var zSurface = new double[gridSize][];
-            //for (int i = 0; i < gridSize; i++)
-            //{
-            //    zSurface[i] = new double[gridSize];
-            //    for (int j = 0; j < gridSize; j++)
-            //    {
-            //        zSurface[i][j] = ObjectiveFunction(xRange[i], yRange[j]);
-            //    }
-            //}
-
-            //var zSurface = new List<double>();
-            //foreach (var x in xRange)
-            //{
-            //    foreach (var y in yRange)
-            //    {
-            //        zSurface.Add(ObjectiveFunction(x, y));
-            //    }
-            //}
-
-            //var surfaceTrace = Chart3D.Chart.Surface<double, double, double, string, string>(
-            //    xRange,
-            //    yRange,
-            //    zSurface
-            //)
-            //.WithSurfaceStyle(
-            //    ColorScale: StyleParam.Colorscale.Viridis
-            //);
-
-            //var chart = Chart.Combine(new[] { surfaceTrace, trace })
             var chart = trace
                 .WithXAxisStyle(Title.init("x"))
                 .WithYAxisStyle(Title.init("y"))
@@ -240,33 +219,34 @@ namespace OptimizavimasBeApribojimu
                 yValues.Add(yValues[0]);
 
 
-                Console.WriteLine($"{xValues[0]} & {yValues[0]} & {xValues[1]} & {yValues[1]} & {xValues[2]} & {yValues[2]} \\\\");
+                Console.WriteLine($"{i} & {Math.Round(xValues[0], 10)} & {Math.Round(yValues[0], 10)} & {Math.Round(xValues[1], 10)} & {Math.Round(yValues[1], 10)} & {Math.Round(xValues[2], 10)} & {Math.Round(yValues[2], 10)} \\\\");
+                //Console.WriteLine($"{xValues[0]} & {yValues[0]} & {xValues[1]} & {yValues[1]} & {xValues[2]} & {yValues[2]} \\\\");
 
-                var trace = Chart2D.Chart.Scatter<double, double, string>(
-                    xValues,
-                    yValues,
-                    mode: StyleParam.Mode.Lines_Markers
-                )
-                .WithLineStyle(
-                    Color: Color.fromString("blue"),
-                    Dash: StyleParam.DrawingStyle.Solid,
-                    Width: 1
-                )
-                .WithMarkerStyle(
-                    Size: 5,
-                    Color: Color.fromString("red"),
-                    Symbol: StyleParam.MarkerSymbol.Circle
-                );
+                //    var trace = Chart2D.Chart.Scatter<double, double, string>(
+                //        xValues,
+                //        yValues,
+                //        mode: StyleParam.Mode.Lines_Markers
+                //    )
+                //    .WithLineStyle(
+                //        Color: Color.fromString("blue"),
+                //        Dash: StyleParam.DrawingStyle.Solid,
+                //        Width: 1
+                //    )
+                //    .WithMarkerStyle(
+                //        Size: 5,
+                //        Color: Color.fromString("red"),
+                //        Symbol: StyleParam.MarkerSymbol.Circle
+                //    );
 
-                traces.Add(trace);
+                //    traces.Add(trace);
             }
 
-            var chart = Chart.Combine(traces)
-                .WithXAxisStyle(Title.init("x"))
-                .WithYAxisStyle(Title.init("y"))
-                .WithSize(1000, 1000);
+            //var chart = Chart.Combine(traces)
+            //    .WithXAxisStyle(Title.init("x"))
+            //    .WithYAxisStyle(Title.init("y"))
+            //    .WithSize(1000, 1000);
 
-            chart.Show();
+            //chart.Show();
         }
     }
 }
